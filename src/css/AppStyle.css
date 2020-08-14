@@ -1,0 +1,19 @@
+.destinationList {
+  display: flex;
+  justify-content: center;
+  margin: 0 auto;
+}
+
+.header {
+  text-align: center;
+}
+
+.destination {
+    padding-right: 15px;
+    margin: 20px;
+}
+
+.vehicleList {
+    padding-top: 20px;
+    /* visibility: hidden; */
+}
