@@ -1,19 +1,31 @@
+.app {
+  text-align: center;
+}
+
 .destinationList {
   display: flex;
   justify-content: center;
   margin: 0 auto;
 }
 
-.header {
-  text-align: center;
-}
-
 .destination {
-    padding-right: 15px;
+    padding: 5%;
+    padding-top: 20px;
+    padding-bottom: 20px;
     margin: 20px;
 }
 
 .vehicleList {
     padding-top: 20px;
     /* visibility: hidden; */
+}
+
+button {
+  padding: 5px;
+  margin: 15px;
+  width: 10%;
+}
+
+.vehicleList {
+  text-align: left;
 }

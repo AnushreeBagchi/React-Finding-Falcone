@@ -7,24 +7,28 @@ class Destinations extends React.Component {
     this.props.destinationSelected(this.props.index, event.currentTarget.value);
   };
   vehicleSelected = (event) => {
-    this.props.vehicleSelected(this.props.index,event.currentTarget.value);
-  }
+    this.props.vehicleSelected(this.props.index, event.currentTarget.value);
+  };
   render() {
     let planets = this.props.planets;
     let optionItems = planets.map((planet) => (
       <option key={planet.name}>{planet.name}</option>
     ));
+    let selectedValue =
+      this.props.destinations[this.props.index].selectedPlanet ||
+      "Select Destination";
     return (
       <div className="destination">
         <h6> {this.props.index.toUpperCase()} </h6>
         <select onChange={this.onDestinationChange}>
-          <option defaultValue>Select Destination</option>
+          <option value={selectedValue}>{selectedValue}</option>
           {optionItems}
         </select>
-          <Vehicle
-                vehicles={this.props.vehicles}
-                vehicleSelected={this.vehicleSelected}
-              ></Vehicle>
+        {this.props.showVehicle && 
+        <Vehicle
+          vehicles={this.props.vehicles}
+          vehicleSelected={this.vehicleSelected}
+        ></Vehicle>}
       </div>
     );
   }
