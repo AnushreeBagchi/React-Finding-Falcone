@@ -3,11 +3,16 @@ import "../css/AppStyle.css";
 import Vehicle from "../components/Vehicle";
 
 class Destinations extends React.Component {
+  state = {
+    selectedPlanet : {}
+  }
   onDestinationChange = (event) => {
+    let selectedPlanet = this.props.planets.filter(planet => planet.name === event.currentTarget.value );
+    this.setState({selectedPlanet});
     this.props.destinationSelected(this.props.index, event.currentTarget.value);
   };
-  vehicleSelected = (event) => {
-    this.props.vehicleSelected(this.props.index, event.currentTarget.value);
+  onVehicleSelect = (event, timetaken) => {
+    this.props.vehicleSelected(this.props.index, event.currentTarget.value, timetaken);
   };
   render() {
     let planets = this.props.planets;
@@ -17,6 +22,7 @@ class Destinations extends React.Component {
     let selectedValue =
       this.props.destinations[this.props.index].selectedPlanet ||
       "Select Destination";
+
     return (
       <div className="destination">
         <h6> {this.props.index.toUpperCase()} </h6>
@@ -24,11 +30,14 @@ class Destinations extends React.Component {
           <option value={selectedValue}>{selectedValue}</option>
           {optionItems}
         </select>
-        {this.props.showVehicle && 
-        <Vehicle
-          vehicles={this.props.vehicles}
-          vehicleSelected={this.vehicleSelected}
-        ></Vehicle>}
+        {this.props.showVehicle && (
+          <Vehicle
+            vehicles={this.props.vehicles}
+            onVehicleSelect={this.onVehicleSelect}
+            destinationGroup={this.props.index}
+            selectedPlanet= {this.state.selectedPlanet}
+          ></Vehicle>
+        )}
       </div>
     );
   }
