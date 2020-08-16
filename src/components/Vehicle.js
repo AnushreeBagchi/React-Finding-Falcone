@@ -1,13 +1,24 @@
 import React from "react";
 import "../css/AppStyle.css";
+import PropTypes from "prop-types";
+
 class Vehicle extends React.Component {
+  static propTypes = {
+    selectedPlanet: PropTypes.array,
+    vehicles: PropTypes.array,
+    onVehicleSelect: PropTypes.func,
+    destinationGroup: PropTypes.string,
+  };
+
   onVehicleSelect = (event) => {
     let distance = this.props.selectedPlanet[0].distance;
-    let vehicleObj = this.props.vehicles.filter(veh => veh.name === event.target.value);
+    let vehicleObj = this.props.vehicles.filter(
+      (veh) => veh.name === event.target.value
+    );
     let speed = vehicleObj[0].speed;
-    let time = distance/speed;
+    let time = distance / speed;
     this.props.onVehicleSelect(event, time);
-  }
+  };
   render() {
     const vehicles = this.props.vehicles;
     return (
@@ -24,7 +35,7 @@ class Vehicle extends React.Component {
                 value={vehicle.name}
                 name={this.props.destinationGroup}
                 onClick={this.onVehicleSelect}
-                speed = {vehicle.speed}
+                speed={vehicle.speed}
                 disabled={vehicle.total_no === 0 || isRangeLess ? true : false}
               />
               {`${vehicle.name} (${vehicle.total_no})`}

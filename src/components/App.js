@@ -1,7 +1,12 @@
 import React from "react";
 import Destinations from "./Destinations";
 import "../css/AppStyle.css";
+import PropTypes from "prop-types";
 class App extends React.Component {
+  static propTypes = {
+    history: PropTypes.object,
+  };
+
   state = {
     planets: {},
     destinations: {
@@ -92,7 +97,7 @@ class App extends React.Component {
           vehicle.total_no = vehicle.total_no - selectedCount;
         }
       });
-      this.setState({ destinations, availableVehicles , selectedVehicles});
+      this.setState({ destinations, availableVehicles, selectedVehicles });
       this.calculateTimeTaken();
     }
   };
@@ -129,9 +134,9 @@ class App extends React.Component {
   findFalcone = async () => {
     let responseToken = await this.getToken();
     let requestBody = {
-      planet_names : this.state.selectedPlanets,
-      vehicle_names : this.state.selectedVehicles,
-      token : responseToken.token
+      planet_names: this.state.selectedPlanets,
+      vehicle_names: this.state.selectedVehicles,
+      token: responseToken.token,
     };
 
     const response = await fetch("https://findfalcone.herokuapp.com/find", {

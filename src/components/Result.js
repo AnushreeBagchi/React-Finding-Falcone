@@ -1,7 +1,12 @@
 import React from "react";
 import "../css/AppStyle.css";
+import PropTypes from "prop-types";
 
 class Result extends React.Component {
+  static propTypes = {
+    history: PropTypes.object,
+  };
+
   ontryAgainClick = () => {
     this.props.history.push({
       pathname: "/",

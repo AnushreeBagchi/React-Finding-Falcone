@@ -1,18 +1,34 @@
 import React from "react";
 import "../css/AppStyle.css";
 import Vehicle from "../components/Vehicle";
-
+import PropTypes from "prop-types";
 class Destinations extends React.Component {
+  static propTypes = {
+    planets: PropTypes.array,
+    vehicles: PropTypes.array,
+    destinationSelected: PropTypes.func,
+    vehicleSelected: PropTypes.func,
+    index: PropTypes.string,
+    destinations: PropTypes.object,
+    showVehicle: PropTypes.bool,
+  };
+
   state = {
-    selectedPlanet : {}
-  }
+    selectedPlanet: {},
+  };
   onDestinationChange = (event) => {
-    let selectedPlanet = this.props.planets.filter(planet => planet.name === event.currentTarget.value );
-    this.setState({selectedPlanet});
+    let selectedPlanet = this.props.planets.filter(
+      (planet) => planet.name === event.currentTarget.value
+    );
+    this.setState({ selectedPlanet });
     this.props.destinationSelected(this.props.index, event.currentTarget.value);
   };
   onVehicleSelect = (event, timetaken) => {
-    this.props.vehicleSelected(this.props.index, event.currentTarget.value, timetaken);
+    this.props.vehicleSelected(
+      this.props.index,
+      event.currentTarget.value,
+      timetaken
+    );
   };
   render() {
     let planets = this.props.planets;
@@ -35,7 +51,7 @@ class Destinations extends React.Component {
             vehicles={this.props.vehicles}
             onVehicleSelect={this.onVehicleSelect}
             destinationGroup={this.props.index}
-            selectedPlanet= {this.state.selectedPlanet}
+            selectedPlanet={this.state.selectedPlanet}
           ></Vehicle>
         )}
       </div>
