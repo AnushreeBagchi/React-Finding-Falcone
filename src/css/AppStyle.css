@@ -29,3 +29,9 @@ button {
 .vehicleList {
   text-align: left;
 }
+
+.resultDiv {
+  text-align: center;
+  padding-top: 10%;
+  
+}

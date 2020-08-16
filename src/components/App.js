@@ -14,7 +14,7 @@ class App extends React.Component {
     vehicles: {},
     availableVehicles: {},
     timetaken: 0,
-    selectedPlanets: []
+    selectedPlanets: [],
   };
   componentDidMount() {
     this.fetchPlanets();
@@ -71,11 +71,12 @@ class App extends React.Component {
       destinations[selectedDestination].selectedVehicle = selectedVehicle;
       destinations[selectedDestination].timetaken = timetaken;
 
-
       let selectedVehiclesList = {};
+      let selectedVehicles = [];
       Object.keys(destinations).forEach((key) => {
         let destination = destinations[key];
         let veh = destination.selectedVehicle;
+        selectedVehicles.push(veh);
         if (veh) {
           selectedVehiclesList[veh] = selectedVehiclesList[veh]
             ? selectedVehiclesList[veh] + 1
@@ -91,21 +92,21 @@ class App extends React.Component {
           vehicle.total_no = vehicle.total_no - selectedCount;
         }
       });
-      this.setState({ destinations, availableVehicles });
+      this.setState({ destinations, availableVehicles , selectedVehicles});
       this.calculateTimeTaken();
     }
   };
 
   calculateTimeTaken = () => {
     let timetaken = 0;
-    Object.keys(this.state.destinations).forEach(key => {
+    Object.keys(this.state.destinations).forEach((key) => {
       if (this.state.destinations[key]) {
         let curr_time = this.state.destinations[key].timetaken;
         timetaken += curr_time;
       }
     });
-    this.setState({timetaken});
-  }
+    this.setState({ timetaken });
+  };
 
   onReset = () => {
     let destinations = {
@@ -117,68 +118,53 @@ class App extends React.Component {
     let availablePlanets = JSON.parse(JSON.stringify(this.state.planets)); //resetting available planets
     let availableVehicles = JSON.parse(JSON.stringify(this.state.vehicles)); //resetting available vehicles
     let timetaken = 0;
-    this.setState({ destinations, availablePlanets, availableVehicles, timetaken });
+    this.setState({
+      destinations,
+      availablePlanets,
+      availableVehicles,
+      timetaken,
+    });
   };
 
-   findFalcone = async () => {
-      let requestBody = this.getFindFalconeRequestBody() || {};
-      let responseToken = await this.getToken();
-      requestBody.token = responseToken.token;
-      console.log(requestBody);
+  findFalcone = async () => {
+    let responseToken = await this.getToken();
+    let requestBody = {
+      planet_names : this.state.selectedPlanets,
+      vehicle_names : this.state.selectedVehicles,
+      token : responseToken.token
+    };
 
-      const response = await fetch("https://findfalcone.herokuapp.com/find", {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          "Accept" : "application/json"
-        },
-        body: JSON.stringify(requestBody) 
-      }).then(response => response.json());
-
-      if(response && response.status==="success"){
-        console.log(`Congratulation!! Falcone is found in ${response.planet_name}`);
-        this.goToResult();
-      } else if (response.status==="false") {
-        console.log("Sorry Falcone is not found. Try again");
-      }
-
-  }
+    const response = await fetch("https://findfalcone.herokuapp.com/find", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Accept: "application/json",
+      },
+      body: JSON.stringify(requestBody),
+    }).then((response) => response.json());
+    this.goToResult(response);
+  };
 
   getToken = async () => {
     const response = await fetch("https://findfalcone.herokuapp.com/token", {
-      method: 'POST', 
+      method: "POST",
       headers: {
-        "Accept" : "application/json"
+        Accept: "application/json",
       },
-      body: {}
-    }).then(response =>  response.json());
+      body: {},
+    }).then((response) => response.json());
     return response;
-  }
+  };
 
-  getFindFalconeRequestBody = () => {
-    let planet_names = [];
-    let vehicle_names = [];
-    Object.keys(this.state.destinations).forEach(key => {
-      let dest = this.state.destinations[key];
-      if (dest.selectedPlanet && dest.selectedVehicle) {
-        planet_names.push(dest.selectedPlanet);
-        vehicle_names.push(dest.selectedVehicle);
-      }
-    });
-    let requestBody = {
-      planet_names, vehicle_names 
-    }
-    return requestBody;
-  }
-
-  goToResult = () => {
+  goToResult = (response) => {
     this.props.history.push({
-      pathname: '/result/',
+      pathname: "/result/",
       state: {
-        "timetaken" : this.state.timetaken
-      }
-    })
-  }
+        response: response,
+        timetaken: this.state.timetaken,
+      },
+    });
+  };
 
   render() {
     return (
@@ -202,16 +188,14 @@ class App extends React.Component {
         ) : (
           <p></p>
         )}
-        <div>
-          Time Taken : {this.state.timetaken}
-          
-        </div>
+        <div>Time Taken : {this.state.timetaken}</div>
         <button className="resetButton" onClick={this.onReset}>
           Reset
         </button>
 
-        <button className="searchButton" onClick={this.findFalcone}>Find Falcone!</button>
-
+        <button className="searchButton" onClick={this.findFalcone}>
+          Find Falcone!
+        </button>
       </div>
     );
   }
