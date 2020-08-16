@@ -11,4 +11,5 @@ This UI will enable King Shan to -
 - see how much time it will take for the vehicles to reach their targets &
 - show final result of success or failure 
 
-Check this out @ https://finding-falcone-anushree.netlify.app/result/
+Check this out @ https://finding-falcone-anushree.netlify.app/
+
