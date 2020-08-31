@@ -2,6 +2,9 @@ import React from "react";
 import "../css/AppStyle.css";
 import Vehicle from "../components/Vehicle";
 import PropTypes from "prop-types";
+import { connect } from "react-redux";
+import { addDestination } from "../store/destinations";
+
 class Destinations extends React.Component {
   static propTypes = {
     planets: PropTypes.array,
@@ -21,15 +24,9 @@ class Destinations extends React.Component {
       (planet) => planet.name === event.currentTarget.value
     );
     this.setState({ selectedPlanet });
-    this.props.destinationSelected(this.props.index, event.currentTarget.value);
+    this.props.addDestination({destination : this.props.index, value: event.currentTarget.value})
   };
-  onVehicleSelect = (event, timetaken) => {
-    this.props.vehicleSelected(
-      this.props.index,
-      event.currentTarget.value,
-      timetaken
-    );
-  };
+
   render() {
     let planets = this.props.planets;
     let optionItems = planets.map((planet) => (
@@ -49,7 +46,6 @@ class Destinations extends React.Component {
         {this.props.showVehicle && (
           <Vehicle
             vehicles={this.props.vehicles}
-            onVehicleSelect={this.onVehicleSelect}
             destinationGroup={this.props.index}
             selectedPlanet={this.state.selectedPlanet}
           ></Vehicle>
@@ -58,4 +54,13 @@ class Destinations extends React.Component {
     );
   }
 }
-export default Destinations;
+// export default Destinations;
+
+const mapStateToProps = state => ({
+  state
+});
+const mapDispatchToProps = dispatch => ({
+  addDestination : (data) => {dispatch(addDestination(data))}
+})
+
+export default connect(mapStateToProps, mapDispatchToProps)(Destinations);

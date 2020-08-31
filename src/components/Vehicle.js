@@ -1,12 +1,13 @@
 import React from "react";
 import "../css/AppStyle.css";
 import PropTypes from "prop-types";
+import { vehicleSelected } from "../store/destinations";
+import { connect } from "react-redux";
 
 class Vehicle extends React.Component {
   static propTypes = {
     selectedPlanet: PropTypes.array,
     vehicles: PropTypes.array,
-    onVehicleSelect: PropTypes.func,
     destinationGroup: PropTypes.string,
   };
 
@@ -17,7 +18,12 @@ class Vehicle extends React.Component {
     );
     let speed = vehicleObj[0].speed;
     let time = distance / speed;
-    this.props.onVehicleSelect(event, time);
+    
+    this.props.vehicleSelected({
+      timetaken: time,
+      selectedVehicle: event.target.value,
+      destination: this.props.destinationGroup,
+    });
   };
   render() {
     const vehicles = this.props.vehicles;
@@ -46,4 +52,14 @@ class Vehicle extends React.Component {
     );
   }
 }
-export default Vehicle;
+
+const mapStateToProps = (state) => ({
+  state,
+});
+const mapDispatchToProps = (dispatch) => ({
+  vehicleSelected: (data) => {
+    dispatch(vehicleSelected(data));
+  },
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(Vehicle);

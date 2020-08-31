@@ -2,111 +2,35 @@ import React from "react";
 import Destinations from "./Destinations";
 import "../css/AppStyle.css";
 import PropTypes from "prop-types";
+import { connect } from "react-redux";
+import {fetchPlanets, getAvailablePlanets } from "../store/planets";
+import { fetchVehicles , getAvailableVehicles} from "../store/vehicles";
+import { getInitialDestinations } from "../store/destinations";
+
+
 class App extends React.Component {
   static propTypes = {
     history: PropTypes.object,
   };
 
   state = {
-    planets: {},
-    destinations: {
-      destination1: "",
-      destination2: "",
-      destination3: "",
-      destination4: "",
-    },
-    availablePlanets: {},
     vehicles: {},
-    availableVehicles: {},
+    availableVehicles: [],
     timetaken: 0,
     selectedPlanets: [],
   };
-  componentDidMount() {
-    this.fetchPlanets();
-    this.fetchVehicles();
+  
+  async componentDidMount() {
+    await this.props.fetchPlanets();
+    await this.props.fetchVehicles();
+    this.props.getInitialDestinations();
   }
-
-  fetchPlanets = () => {
-    const planetUrl = "https://findfalcone.herokuapp.com/planets";
-    fetch(planetUrl)
-      .then((response) => response.json())
-      .then((planets) =>
-        this.setState({ planets: planets, availablePlanets: planets })
-      );
-  };
-
-  fetchVehicles = () => {
-    const vehicleUrl = "https://findfalcone.herokuapp.com/vehicles";
-    fetch(vehicleUrl)
-      .then((response) => response.json())
-      .then((vehicles) =>
-        this.setState({ vehicles: vehicles, availableVehicles: vehicles })
-      );
-  };
-
-  destinationSelected = (selectedDestination, selectedPlanet) => {
-    if (selectedDestination) {
-      let destinations = { ...this.state.destinations };
-      destinations[selectedDestination] = { selectedPlanet, showVehicle: true };
-
-      // updating selected planet array
-      let selectedPlanets = [];
-      Object.keys(destinations).forEach((destination) => {
-        let planet = destinations[destination].selectedPlanet;
-        if (planet) {
-          selectedPlanets.push(planet);
-        }
-      });
-
-      //getting the unselected planets
-      let availablePlanets = [];
-      Object.keys(this.state.planets).forEach((planet) => {
-        if (!selectedPlanets.includes(this.state.planets[planet].name)) {
-          availablePlanets.push(this.state.planets[planet]);
-        }
-      });
-
-      this.setState({ destinations, availablePlanets, selectedPlanets });
-    }
-  };
-
-  vehicleSelected = (selectedDestination, selectedVehicle, timetaken) => {
-    if (selectedVehicle) {
-      let destinations = { ...this.state.destinations };
-      destinations[selectedDestination].selectedVehicle = selectedVehicle;
-      destinations[selectedDestination].timetaken = timetaken;
-
-      let selectedVehiclesList = {};
-      let selectedVehicles = [];
-      Object.keys(destinations).forEach((key) => {
-        let destination = destinations[key];
-        let veh = destination.selectedVehicle;
-        selectedVehicles.push(veh);
-        if (veh) {
-          selectedVehiclesList[veh] = selectedVehiclesList[veh]
-            ? selectedVehiclesList[veh] + 1
-            : 1;
-        }
-      });
-
-      let availableVehicles = JSON.parse(JSON.stringify(this.state.vehicles));
-      availableVehicles.forEach((vehicle) => {
-        let selectedCount = 0;
-        if (vehicle.name in selectedVehiclesList) {
-          selectedCount = selectedVehiclesList[vehicle.name];
-          vehicle.total_no = vehicle.total_no - selectedCount;
-        }
-      });
-      this.setState({ destinations, availableVehicles, selectedVehicles });
-      this.calculateTimeTaken();
-    }
-  };
-
+  
   calculateTimeTaken = () => {
     let timetaken = 0;
-    Object.keys(this.state.destinations).forEach((key) => {
-      if (this.state.destinations[key]) {
-        let curr_time = this.state.destinations[key].timetaken;
+    Object.keys(this.props.state.destinations).forEach((key) => {
+      if (this.props.state.destinations[key]) {
+        let curr_time = this.props.state.destinations[key].timetaken;
         timetaken += curr_time;
       }
     });
@@ -175,18 +99,17 @@ class App extends React.Component {
     return (
       <div className="app">
         <h1 className="header">Finding Falcone!</h1>
-        {this.state.planets.length > 0 && this.state.vehicles.length > 0 ? (
+        {this.props.state.planets.length > 0 && this.props.state.vehicles.length > 0 ? (
           <ul className="destinationList">
-            {Object.keys(this.state.destinations).map((dest) => (
+            {Object.keys(this.props.state.destinations).map((dest) => (
               <Destinations
                 key={dest}
                 index={dest}
-                planets={this.state.availablePlanets}
-                vehicles={this.state.availableVehicles}
-                destinations={this.state.destinations}
+                planets={getAvailablePlanets(this.props.state)}
+                vehicles={getAvailableVehicles(this.props.state)}
+                destinations={this.props.state.destinations}
                 destinationSelected={this.destinationSelected}
-                vehicleSelected={this.vehicleSelected}
-                showVehicle={this.state.destinations[dest].showVehicle}
+                showVehicle={this.props.state.destinations[dest].showVehicle}
               ></Destinations>
             ))}
           </ul>
@@ -197,7 +120,6 @@ class App extends React.Component {
         <button className="resetButton" onClick={this.onReset}>
           Reset
         </button>
-
         <button className="searchButton" onClick={this.findFalcone}>
           Find Falcone!
         </button>
@@ -206,4 +128,14 @@ class App extends React.Component {
   }
 }
 
-export default App;
+const mapStateToProps = state => ({
+  state
+});
+const mapDispatchToProps = dispatch => ({
+  fetchPlanets : () => { dispatch(fetchPlanets()) },
+  fetchVehicles : () => {dispatch(fetchVehicles())},
+  getAvailablePlanets : () => {dispatch(getAvailablePlanets())},
+  getInitialDestinations : () => {dispatch(getInitialDestinations())}
+})
+
+export default connect(mapStateToProps, mapDispatchToProps)(App);
