@@ -1,24 +1,18 @@
-import axios from "axios";
-import * as actions from "../api";
 import * as url from "../contants";
-import {fetchVehiclesAction} from "./actions";
+import {fetchVehiclesAction, fetchVehiclesActionFailed} from "./actions";
 
 //actioncreators
 
 export const fetchVehicles = () => async (dispatch) => {
-  try {
-    const response = await axios.request({
-      url: url.VEHICLE_API,
+    dispatch({
+      type: "apiCallBegan",
+      payload: {
+        url : url.VEHICLE_API,
+        onSuccess: fetchVehiclesAction.type,
+        onError: fetchVehiclesActionFailed.type,
+      }
     });
-
-    // dispatch(actions.apiCallSuccess(response.data));
-    dispatch(fetchVehiclesAction(response.data));
-  } catch (error) {
-    dispatch(actions.apiCallFailed(error.message));
-  }
 };
-
-
 
 export const getAvailableVehicles = state => {
   let vehObj = {};
@@ -37,4 +31,16 @@ export const getAvailableVehicles = state => {
     }
   });
   return availableVehicles;
+}
+
+export const getSelectedVehicles = state => {
+  let selectedVehicles = [];
+  let destinations = state.destinations;
+    Object.keys(destinations).forEach(key => {
+      let dest = destinations[key];
+      if (dest.selectedVehicle ){
+        selectedVehicles.push(dest.selectedVehicle);
+      }
+    });
+    return selectedVehicles
 }

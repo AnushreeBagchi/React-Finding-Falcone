@@ -3,23 +3,30 @@ import Destinations from "./Destinations";
 import "../css/AppStyle.css";
 import PropTypes from "prop-types";
 import { connect } from "react-redux";
-import { fetchPlanets, getAvailablePlanets } from "../store/actions/planets";
-import { fetchVehicles , getAvailableVehicles} from "../store/actions/vehicles";
+import {
+  fetchPlanets,
+  getAvailablePlanets,
+  getSelectedPlanets,
+} from "../store/actions/planets";
+import {
+  fetchVehicles,
+  getAvailableVehicles,
+  getSelectedVehicles,
+} from "../store/actions/vehicles";
 import { getInitialDestinations } from "../store/actions/destinations";
-import { findFalcone } from "../store/actions/findFalcone";
-
+import { findFalcone, getToken } from "../store/actions/findFalcone";
 
 class App extends React.Component {
   static propTypes = {
     history: PropTypes.object,
   };
-  
+
   async componentDidMount() {
     await this.props.fetchPlanets();
     await this.props.fetchVehicles();
     this.props.getInitialDestinations();
   }
-  
+
   getTimeTaken = () => {
     let timetaken = 0;
     Object.keys(this.props.state.destinations).forEach((key) => {
@@ -38,22 +45,14 @@ class App extends React.Component {
   };
 
   findFalcone = async () => {
-    let selectedPlanets = [];
-    let selectedVehicles = [];
-    let destinations = this.props.state.destinations;
-    Object.keys(destinations).forEach(key => {
-      let dest = destinations[key];
-      if (dest.selectedPlanet && dest.selectedVehicle ){
-        selectedPlanets.push(dest.selectedPlanet);
-        selectedVehicles.push(dest.selectedVehicle);
-      }
-    })
-
+    await this.props.getToken();
     let requestBody = {
-      planet_names: selectedPlanets,
-      vehicle_names: selectedVehicles,
+      token: this.props.state.findFalcone.token.token,
+      planet_names: getSelectedPlanets(this.props.state),
+      vehicle_names: getSelectedVehicles(this.props.state),
     };
-    this.props.findFalcone(requestBody).then(response => this.goToResult());
+    await this.props.findFalcone(requestBody);
+    this.goToResult();
   };
 
   goToResult = () => {
@@ -70,7 +69,8 @@ class App extends React.Component {
     return (
       <div className="app">
         <h1 className="header">Finding Falcone!</h1>
-        {this.props.state.planets.length > 0 && this.props.state.vehicles.length > 0 ? (
+        {this.props.state.planets.length > 0 &&
+        this.props.state.vehicles.length > 0 ? (
           <ul className="destinationList">
             {Object.keys(this.props.state.destinations).map((dest) => (
               <Destinations
@@ -96,15 +96,25 @@ class App extends React.Component {
   }
 }
 
-const mapStateToProps = state => ({
-  state
+const mapStateToProps = (state) => ({
+  state,
 });
-const mapDispatchToProps = dispatch => ({
-  fetchPlanets : () => { dispatch(fetchPlanets()) },
-  fetchVehicles : () => {dispatch(fetchVehicles())},
-  getAvailablePlanets : () => {dispatch(getAvailablePlanets())},
-  getInitialDestinations : () => {dispatch(getInitialDestinations())},
-  findFalcone : (data) => {return dispatch(findFalcone(data))}
-})
+const mapDispatchToProps = (dispatch) => ({
+  fetchPlanets: () => {
+    dispatch(fetchPlanets());
+  },
+  fetchVehicles: () => {
+    dispatch(fetchVehicles());
+  },
+  getInitialDestinations: () => {
+    dispatch(getInitialDestinations());
+  },
+  getToken: () => {
+    return dispatch(getToken());
+  },
+  findFalcone: (data) => {
+    return dispatch(findFalcone(data));
+  },
+});
 
 export default connect(mapStateToProps, mapDispatchToProps)(App);

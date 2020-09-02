@@ -1,21 +1,18 @@
-import axios from "axios";
-import * as actions from "../api";
 import * as url from "../contants";
-import {fetchPlanetsAction} from "./actions"
+import {fetchPlanetsAction, fetchPlanetsActionFailed} from "./actions";
+// import {planetsReducer} from "../reducers/planetsReducer"
 
 //actions
 
 export const fetchPlanets = () => async (dispatch) => {
-    try {
-        const response = await axios.request({
-          url : url.PLANET_API
-        });
-
-        dispatch(fetchPlanetsAction(response.data));
-       
-      } catch (error) {
-        dispatch(actions.apiCallFailed(error.message));
+    dispatch({
+      type: "apiCallBegan",
+      payload: {
+        url : url.PLANET_API,
+        onSuccess: fetchPlanetsAction.type,
+        onError: fetchPlanetsActionFailed.type
       }
+    })
 };
 
 //selector
@@ -34,5 +31,17 @@ export const getAvailablePlanets = state => {
       return planet;
     } 
   });
+}
+
+export const getSelectedPlanets = state => {
+  let selectedPlanets = [];
+  let destinations = state.destinations;
+    Object.keys(destinations).forEach(key => {
+      let dest = destinations[key];
+      if (dest.selectedPlanet ){
+        selectedPlanets.push(dest.selectedPlanet);
+      }
+    });
+    return selectedPlanets
 }
 
