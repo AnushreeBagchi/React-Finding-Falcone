@@ -1,18 +1,18 @@
 import React from "react";
 import "../css/AppStyle.css";
 import PropTypes from "prop-types";
-import { vehicleSelected } from "../store/destinations";
+import { vehicleSelected } from "../store/destinations/destinations";
 import { connect } from "react-redux";
 
 class Vehicle extends React.Component {
   static propTypes = {
-    selectedPlanet: PropTypes.array,
     vehicles: PropTypes.array,
     destinationGroup: PropTypes.string,
   };
 
   onVehicleSelect = (event) => {
-    let distance = this.props.selectedPlanet[0].distance;
+    let selectedPlanet =  this.getCurrentPlanet();
+    let distance = selectedPlanet[0].distance;
     let vehicleObj = this.props.vehicles.filter(
       (veh) => veh.name === event.target.value
     );
@@ -25,14 +25,25 @@ class Vehicle extends React.Component {
       destination: this.props.destinationGroup,
     });
   };
+  getCurrentPlanet = () => {
+    let state = this.props.state;
+    let currentDest = this.props.destinationGroup;
+    let currentPlanet = state.destinations[currentDest].selectedPlanet;
+    return state.planets.filter(planet => planet.name === currentPlanet);
+  }
+  getIsRangeLess = (vehicleMaxDistance) => {
+    let planet = this.getCurrentPlanet();
+    let distance = planet[0] ? planet[0].distance : 0 ;
+    return distance > vehicleMaxDistance;
+  }
+
   render() {
     const vehicles = this.props.vehicles;
     return (
       <div className="vehicleList">
         {vehicles.map((vehicle) => {
           let index = vehicles.indexOf(vehicle);
-          let isRangeLess =
-            this.props.selectedPlanet[0].distance > vehicle.max_distance;
+          let isRangeLess = this.getIsRangeLess(vehicle.max_distance);
           return (
             <div key={index}>
               <input

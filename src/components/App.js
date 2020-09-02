@@ -3,21 +3,15 @@ import Destinations from "./Destinations";
 import "../css/AppStyle.css";
 import PropTypes from "prop-types";
 import { connect } from "react-redux";
-import {fetchPlanets, getAvailablePlanets } from "../store/planets";
-import { fetchVehicles , getAvailableVehicles} from "../store/vehicles";
-import { getInitialDestinations } from "../store/destinations";
+import {fetchPlanets, getAvailablePlanets } from "../store/planets/planets";
+import { fetchVehicles , getAvailableVehicles} from "../store/vehicles/vehicles";
+import { getInitialDestinations } from "../store/destinations/destinations";
+import { findFalcone } from "../store/findFalcone";
 
 
 class App extends React.Component {
   static propTypes = {
     history: PropTypes.object,
-  };
-
-  state = {
-    vehicles: {},
-    availableVehicles: [],
-    timetaken: 0,
-    selectedPlanets: [],
   };
   
   async componentDidMount() {
@@ -26,71 +20,48 @@ class App extends React.Component {
     this.props.getInitialDestinations();
   }
   
-  calculateTimeTaken = () => {
+  getTimeTaken = () => {
     let timetaken = 0;
     Object.keys(this.props.state.destinations).forEach((key) => {
       if (this.props.state.destinations[key]) {
         let curr_time = this.props.state.destinations[key].timetaken;
-        timetaken += curr_time;
+        if (curr_time) {
+          timetaken += curr_time;
+        }
       }
     });
-    this.setState({ timetaken });
+    return timetaken;
   };
 
   onReset = () => {
-    let destinations = {
-      destination1: "",
-      destination2: "",
-      destination3: "",
-      destination4: "",
-    };
-    let availablePlanets = JSON.parse(JSON.stringify(this.state.planets)); //resetting available planets
-    let availableVehicles = JSON.parse(JSON.stringify(this.state.vehicles)); //resetting available vehicles
-    let timetaken = 0;
-    this.setState({
-      destinations,
-      availablePlanets,
-      availableVehicles,
-      timetaken,
-    });
+    this.props.getInitialDestinations();
   };
 
   findFalcone = async () => {
-    let responseToken = await this.getToken();
+    let selectedPlanets = [];
+    let selectedVehicles = [];
+    let destinations = this.props.state.destinations;
+    Object.keys(destinations).forEach(key => {
+      let dest = destinations[key];
+      if (dest.selectedPlanet && dest.selectedVehicle ){
+        selectedPlanets.push(dest.selectedPlanet);
+        selectedVehicles.push(dest.selectedVehicle);
+      }
+    })
+
     let requestBody = {
-      planet_names: this.state.selectedPlanets,
-      vehicle_names: this.state.selectedVehicles,
-      token: responseToken.token,
+      planet_names: selectedPlanets,
+      vehicle_names: selectedVehicles,
     };
-
-    const response = await fetch("https://findfalcone.herokuapp.com/find", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        Accept: "application/json",
-      },
-      body: JSON.stringify(requestBody),
-    }).then((response) => response.json());
-    this.goToResult(response);
+    this.props.findFalcone(requestBody).then(response => this.goToResult());
   };
 
-  getToken = async () => {
-    const response = await fetch("https://findfalcone.herokuapp.com/token", {
-      method: "POST",
-      headers: {
-        Accept: "application/json",
-      },
-      body: {},
-    }).then((response) => response.json());
-    return response;
-  };
-
-  goToResult = (response) => {
+  goToResult = () => {
     this.props.history.push({
       pathname: "/result/",
       state: {
-        response: response,
-        timetaken: this.state.timetaken,
+        response: this.props.state.findFalcone,
+        timetaken: this.getTimeTaken(),
       },
     });
   };
@@ -107,16 +78,13 @@ class App extends React.Component {
                 index={dest}
                 planets={getAvailablePlanets(this.props.state)}
                 vehicles={getAvailableVehicles(this.props.state)}
-                destinations={this.props.state.destinations}
-                destinationSelected={this.destinationSelected}
-                showVehicle={this.props.state.destinations[dest].showVehicle}
               ></Destinations>
             ))}
           </ul>
         ) : (
           <p></p>
         )}
-        <div>Time Taken : {this.state.timetaken}</div>
+        <div>Time Taken : {this.getTimeTaken()}</div>
         <button className="resetButton" onClick={this.onReset}>
           Reset
         </button>
@@ -135,7 +103,8 @@ const mapDispatchToProps = dispatch => ({
   fetchPlanets : () => { dispatch(fetchPlanets()) },
   fetchVehicles : () => {dispatch(fetchVehicles())},
   getAvailablePlanets : () => {dispatch(getAvailablePlanets())},
-  getInitialDestinations : () => {dispatch(getInitialDestinations())}
+  getInitialDestinations : () => {dispatch(getInitialDestinations())},
+  findFalcone : (data) => {return dispatch(findFalcone(data))}
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(App);

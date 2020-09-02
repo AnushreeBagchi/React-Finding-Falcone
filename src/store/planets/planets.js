@@ -1,10 +1,11 @@
 import axios from "axios";
-import * as actions from "./api";
+import * as actions from "../api";
 import { createAction, createReducer} from "@reduxjs/toolkit";
-import * as url from "./config/remoteUrls";
+import * as url from "../config/remoteUrls";
 
 //actions
 const fetchPlanetsAction = createAction("fetchPlanets");
+
 export const fetchPlanets = () => async (dispatch) => {
     try {
         const response = await axios.request({
@@ -20,6 +21,7 @@ export const fetchPlanets = () => async (dispatch) => {
 
 const reducer = createReducer([], {
 [fetchPlanetsAction.type]: (planets, action) => {
+    planets.length = 0; //resetting the array
     action.payload.forEach(planet => {
         planets.push(planet);
     });

@@ -1,7 +1,7 @@
 import axios from "axios";
-import * as actions from "./api";
+import * as actions from "../api";
 import { createAction, createReducer } from "@reduxjs/toolkit";
-import * as url from "./config/remoteUrls";
+import * as url from "../config/remoteUrls";
 
 //actions
 const fetchVehiclesAction = createAction("fetchVehicles");
@@ -21,15 +21,13 @@ export const fetchVehicles = () => async (dispatch) => {
   }
 };
 
-
-
 const reducer = createReducer([], {
   [fetchVehiclesAction.type]: (vehicles, action) => {
+    vehicles.length = 0; //resetting the array
     action.payload.forEach(veh => {
       vehicles.push(veh)
     });
-  },
-
+  }
 });
 
 export const getAvailableVehicles = state => {

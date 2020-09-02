@@ -3,28 +3,26 @@ import "../css/AppStyle.css";
 import Vehicle from "../components/Vehicle";
 import PropTypes from "prop-types";
 import { connect } from "react-redux";
-import { addDestination } from "../store/destinations";
+import { addDestination } from "../store/destinations/destinations";
 
 class Destinations extends React.Component {
   static propTypes = {
     planets: PropTypes.array,
     vehicles: PropTypes.array,
-    destinationSelected: PropTypes.func,
-    vehicleSelected: PropTypes.func,
     index: PropTypes.string,
-    destinations: PropTypes.object,
-    showVehicle: PropTypes.bool,
   };
 
-  state = {
-    selectedPlanet: {},
-  };
   onDestinationChange = (event) => {
-    let selectedPlanet = this.props.planets.filter(
-      (planet) => planet.name === event.currentTarget.value
-    );
-    this.setState({ selectedPlanet });
-    this.props.addDestination({destination : this.props.index, value: event.currentTarget.value})
+    this.props.addDestination({
+      destination: this.props.index,
+      value: event.currentTarget.value,
+    });
+  };
+
+  showVehicle = () => {
+    let destinations = this.props.state.destinations;
+    let currentDest = destinations[this.props.index];
+    return currentDest.selectedPlanet ? true : false;
   };
 
   render() {
@@ -33,7 +31,7 @@ class Destinations extends React.Component {
       <option key={planet.name}>{planet.name}</option>
     ));
     let selectedValue =
-      this.props.destinations[this.props.index].selectedPlanet ||
+      this.props.state.destinations[this.props.index].selectedPlanet ||
       "Select Destination";
 
     return (
@@ -43,24 +41,24 @@ class Destinations extends React.Component {
           <option value={selectedValue}>{selectedValue}</option>
           {optionItems}
         </select>
-        {this.props.showVehicle && (
+        {this.showVehicle() && (
           <Vehicle
             vehicles={this.props.vehicles}
             destinationGroup={this.props.index}
-            selectedPlanet={this.state.selectedPlanet}
           ></Vehicle>
         )}
       </div>
     );
   }
 }
-// export default Destinations;
 
-const mapStateToProps = state => ({
-  state
+const mapStateToProps = (state) => ({
+  state,
 });
-const mapDispatchToProps = dispatch => ({
-  addDestination : (data) => {dispatch(addDestination(data))}
-})
+const mapDispatchToProps = (dispatch) => ({
+  addDestination: (data) => {
+    dispatch(addDestination(data));
+  },
+});
 
 export default connect(mapStateToProps, mapDispatchToProps)(Destinations);

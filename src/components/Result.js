@@ -15,13 +15,13 @@ class Result extends React.Component {
 
   render() {
     const isSuccess =
-      this.props.history.location.state.response.status === "success"
+      this.props.location.state.response.result.status === "success"
         ? true
         : false;
     const successMsg =
       "Success! Congratulations on Finding Falcone. King Shan is mighty pleased.";
     const failureMsg = "Falcone is not found! Please try again.";
-    const planet = this.props.history.location.state.response.planet_name;
+    const planet = this.props.history.location.state.response.result.planet_name;
 
     return (
       <div className="resultDiv">
@@ -36,6 +36,7 @@ class Result extends React.Component {
         )}
         <button onClick={this.ontryAgainClick}>Start Again</button>
       </div>
+
     );
   }
 }
