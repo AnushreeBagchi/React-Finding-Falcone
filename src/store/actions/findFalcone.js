@@ -1,12 +1,11 @@
 import axios from "axios";
-import * as actions from "./api";
-import { createAction, createReducer } from "@reduxjs/toolkit";
-import * as url from "./contants";
+import * as actions from "../api";
+import * as url from "../contants";
+import {findFalconeAction} from "./actions"
 
 //actions
 
 export const findFalcone =  (requestPayload) => async (dispatch) => {
-  console.log("inside find falcone");
   let responseToken = await getToken();
   requestPayload.token = responseToken.token;
 
@@ -14,12 +13,7 @@ export const findFalcone =  (requestPayload) => async (dispatch) => {
   axios.defaults.headers.common["Content-Type"] = "application/json";
   return axios
     .post(url.FIND_FALCONE_API, requestPayload)
-    .then((res) => {
-      dispatch({
-        type: "FIND_FALCONE",
-        payload: res.data,
-      });
-    })
+    .then((res) => { dispatch(findFalconeAction(res.data)) })
     .catch((error) => dispatch(actions.apiCallFailed(error.message)));
 };
 
@@ -39,13 +33,3 @@ const getToken = async (dispatch) => {
   return token;
 };
 
-const reducer = createReducer(
-  {},
-  {
-    FIND_FALCONE: (findFalcone, action) => {
-      findFalcone.result = action.payload;
-    },
-  }
-);
-
-export default reducer;

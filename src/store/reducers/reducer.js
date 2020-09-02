@@ -1,8 +1,8 @@
 import { combineReducers } from "redux";
-import planetsReducer from "./planets/planets";
-import vehiclesReducer from "./vehicles/vehicles";
-import destinationReducer from "./destinations/destinations";
-import findFalconeReducer from "./findFalcone";
+import planetsReducer from "./planetsReducer";
+import vehiclesReducer from "./vehiclesReducer";
+import destinationReducer from "./destinationsReducer";
+import findFalconeReducer from "./findFalconeReducer";
 
 export default combineReducers({
     planets : planetsReducer,

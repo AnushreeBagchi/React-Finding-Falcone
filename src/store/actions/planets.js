@@ -1,10 +1,9 @@
 import axios from "axios";
 import * as actions from "../api";
-import { createAction, createReducer} from "@reduxjs/toolkit";
 import * as url from "../contants";
+import {fetchPlanetsAction} from "./actions"
 
 //actions
-const fetchPlanetsAction = createAction("fetchPlanets");
 
 export const fetchPlanets = () => async (dispatch) => {
     try {
@@ -18,15 +17,6 @@ export const fetchPlanets = () => async (dispatch) => {
         dispatch(actions.apiCallFailed(error.message));
       }
 };
-
-const reducer = createReducer([], {
-[fetchPlanetsAction.type]: (planets, action) => {
-    planets.length = 0; //resetting the array
-    action.payload.forEach(planet => {
-        planets.push(planet);
-    });
-}
-});
 
 //selector
 export const getAvailablePlanets = state => {
@@ -46,4 +36,3 @@ export const getAvailablePlanets = state => {
   });
 }
 
-export default reducer;

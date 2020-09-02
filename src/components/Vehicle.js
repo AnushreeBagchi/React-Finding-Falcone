@@ -1,7 +1,7 @@
 import React from "react";
 import "../css/AppStyle.css";
 import PropTypes from "prop-types";
-import { vehicleSelected } from "../store/destinations/destinations";
+import { vehicleSelected } from "../store/actions/destinations";
 import { connect } from "react-redux";
 
 class Vehicle extends React.Component {

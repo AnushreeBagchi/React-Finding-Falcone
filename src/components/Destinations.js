@@ -3,7 +3,7 @@ import "../css/AppStyle.css";
 import Vehicle from "../components/Vehicle";
 import PropTypes from "prop-types";
 import { connect } from "react-redux";
-import { addDestination } from "../store/destinations/destinations";
+import { addDestination } from "../store/actions/destinations";
 
 class Destinations extends React.Component {
   static propTypes = {

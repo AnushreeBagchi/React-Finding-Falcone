@@ -1,6 +1,7 @@
 import React from "react";
 import "../css/AppStyle.css";
 import PropTypes from "prop-types";
+import {SUCCESS_MSG, FAILED_MSG} from "../store/contants"
 
 class Result extends React.Component {
   static propTypes = {
@@ -18,9 +19,8 @@ class Result extends React.Component {
       this.props.location.state.response.result.status === "success"
         ? true
         : false;
-    const successMsg =
-      "Success! Congratulations on Finding Falcone. King Shan is mighty pleased.";
-    const failureMsg = "Falcone is not found! Please try again.";
+    const successMsg = SUCCESS_MSG;
+    const failureMsg = FAILED_MSG;
     const planet = this.props.history.location.state.response.result.planet_name;
 
     return (

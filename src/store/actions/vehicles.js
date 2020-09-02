@@ -1,10 +1,7 @@
 import axios from "axios";
 import * as actions from "../api";
-import { createAction, createReducer } from "@reduxjs/toolkit";
 import * as url from "../contants";
-
-//actions
-const fetchVehiclesAction = createAction("fetchVehicles");
+import {fetchVehiclesAction} from "./actions";
 
 //actioncreators
 
@@ -21,14 +18,7 @@ export const fetchVehicles = () => async (dispatch) => {
   }
 };
 
-const reducer = createReducer([], {
-  [fetchVehiclesAction.type]: (vehicles, action) => {
-    vehicles.length = 0; //resetting the array
-    action.payload.forEach(veh => {
-      vehicles.push(veh)
-    });
-  }
-});
+
 
 export const getAvailableVehicles = state => {
   let vehObj = {};
@@ -48,5 +38,3 @@ export const getAvailableVehicles = state => {
   });
   return availableVehicles;
 }
-
-export default reducer;

@@ -3,10 +3,10 @@ import Destinations from "./Destinations";
 import "../css/AppStyle.css";
 import PropTypes from "prop-types";
 import { connect } from "react-redux";
-import {fetchPlanets, getAvailablePlanets } from "../store/planets/planets";
-import { fetchVehicles , getAvailableVehicles} from "../store/vehicles/vehicles";
-import { getInitialDestinations } from "../store/destinations/destinations";
-import { findFalcone } from "../store/findFalcone";
+import { fetchPlanets, getAvailablePlanets } from "../store/actions/planets";
+import { fetchVehicles , getAvailableVehicles} from "../store/actions/vehicles";
+import { getInitialDestinations } from "../store/actions/destinations";
+import { findFalcone } from "../store/actions/findFalcone";
 
 
 class App extends React.Component {
