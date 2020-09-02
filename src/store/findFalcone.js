@@ -1,7 +1,7 @@
 import axios from "axios";
 import * as actions from "./api";
 import { createAction, createReducer } from "@reduxjs/toolkit";
-import * as url from "./config/remoteUrls";
+import * as url from "./contants";
 
 //actions
 

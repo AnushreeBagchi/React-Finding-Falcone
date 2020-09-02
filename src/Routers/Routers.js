@@ -4,9 +4,9 @@ import {
   Switch,
   Route
 } from "react-router-dom";
-import App from "./App";
-import NotFound from "./NotFound";
-import Result from "./Result";
+import App from "../components/App";
+import NotFound from "../components/NotFound";
+import Result from "../components/Result";
 
 export default function Routers() {
   return (
