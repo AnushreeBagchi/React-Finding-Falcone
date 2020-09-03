@@ -15,13 +15,14 @@ class Result extends React.Component {
   };
 
   render() {
+    const result = this.props.location.state.response.result;
     const isSuccess =
-      this.props.location.state.response.result.status === "success"
+      result && result.status === "success"
         ? true
         : false;
     const successMsg = SUCCESS_MSG;
     const failureMsg = FAILED_MSG;
-    const planet = this.props.history.location.state.response.result.planet_name;
+    const planet = result && result.planet_name;
 
     return (
       <div className="resultDiv">

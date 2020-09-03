@@ -19,3 +19,15 @@ export const vehicleSelected = (data) => (dispatch) => {
 };
 
 
+export const getTimeTaken = state => {
+  let timetaken = 0;
+  Object.keys(state.destinations).forEach((key) => {
+    if (state.destinations[key]) {
+      let curr_time = state.destinations[key].timetaken;
+      if (curr_time) {
+        timetaken += curr_time;
+      }
+    }
+  });
+  return timetaken;
+}

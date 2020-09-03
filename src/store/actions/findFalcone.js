@@ -8,10 +8,19 @@ import {
 } from "./actions";
 
 //actions
+import { NUMBER_OF_DESTINATIONS } from "../contants";
 
 export const findFalcone = (requestPayload) => async (dispatch) => {
-  // let responseToken = await getToken();
-  // requestPayload.token = responseToken.token;
+  if (
+    requestPayload.planet_names &&
+    requestPayload.planet_names.length !== NUMBER_OF_DESTINATIONS &&
+    requestPayload.vehicle_names &&
+    requestPayload.vehicle_names.length !== NUMBER_OF_DESTINATIONS
+  ) {
+    dispatch({
+      type: findFalconeActionFailed.type
+    })
+  }
 
   return dispatch({
     type: "apiCallBegan",

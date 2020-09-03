@@ -13,7 +13,7 @@ import {
   getAvailableVehicles,
   getSelectedVehicles,
 } from "../store/actions/vehicles";
-import { getInitialDestinations } from "../store/actions/destinations";
+import { getInitialDestinations, getTimeTaken } from "../store/actions/destinations";
 import { findFalcone, getToken } from "../store/actions/findFalcone";
 
 class App extends React.Component {
@@ -27,18 +27,7 @@ class App extends React.Component {
     this.props.getInitialDestinations();
   }
 
-  getTimeTaken = () => {
-    let timetaken = 0;
-    Object.keys(this.props.state.destinations).forEach((key) => {
-      if (this.props.state.destinations[key]) {
-        let curr_time = this.props.state.destinations[key].timetaken;
-        if (curr_time) {
-          timetaken += curr_time;
-        }
-      }
-    });
-    return timetaken;
-  };
+  
 
   onReset = () => {
     this.props.getInitialDestinations();
@@ -60,7 +49,7 @@ class App extends React.Component {
       pathname: "/result/",
       state: {
         response: this.props.state.findFalcone,
-        timetaken: this.getTimeTaken(),
+        timetaken: getTimeTaken(this.props.state),
       },
     });
   };
@@ -84,7 +73,7 @@ class App extends React.Component {
         ) : (
           <p></p>
         )}
-        <div>Time Taken : {this.getTimeTaken()}</div>
+        <div>Time Taken : {getTimeTaken(this.props.state)}</div>
         <button className="resetButton" onClick={this.onReset}>
           Reset
         </button>
