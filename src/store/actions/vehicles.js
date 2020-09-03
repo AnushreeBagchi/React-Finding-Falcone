@@ -1,5 +1,5 @@
-import * as url from "../contants";
-import {fetchVehiclesAction, fetchVehiclesActionFailed} from "./actions";
+import {FETCH_VEHICLES_FAILED_MSG, VEHICLE_API} from "../constants";
+import {fetchVehiclesAction} from "./actions";
 
 //actioncreators
 
@@ -7,9 +7,9 @@ export const fetchVehicles = () => async (dispatch) => {
     dispatch({
       type: "apiCallBegan",
       payload: {
-        url : url.VEHICLE_API,
+        url : VEHICLE_API,
         onSuccess: fetchVehiclesAction.type,
-        onError: fetchVehiclesActionFailed.type,
+        onError: FETCH_VEHICLES_FAILED_MSG,
       }
     });
 };

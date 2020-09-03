@@ -7,6 +7,7 @@ import {
 import App from "../components/App";
 import NotFound from "../components/NotFound";
 import Result from "../components/Result";
+import ErrorNotification from "../components/ErrorNotification";
 
 export default function Routers() {
   return (
@@ -15,6 +16,7 @@ export default function Routers() {
         <Switch>
             <Route exact path="/" component={App}/>
             <Route exact path="/result" component={Result}/>
+            <Route exact path="/error" component={ErrorNotification}/>
             <Route exact component={NotFound}/>
         </Switch>
       </div>

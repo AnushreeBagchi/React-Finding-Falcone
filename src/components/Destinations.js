@@ -4,6 +4,7 @@ import Vehicle from "../components/Vehicle";
 import PropTypes from "prop-types";
 import { connect } from "react-redux";
 import { addDestination } from "../store/actions/destinations";
+import { SELECT_DEST_MSG } from "../store/constants";
 
 class Destinations extends React.Component {
   static propTypes = {
@@ -32,7 +33,7 @@ class Destinations extends React.Component {
     ));
     let selectedValue =
       this.props.state.destinations[this.props.index].selectedPlanet ||
-      "Select Destination";
+      SELECT_DEST_MSG;
 
     return (
       <div className="destination">

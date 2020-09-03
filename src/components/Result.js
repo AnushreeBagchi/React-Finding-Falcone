@@ -1,7 +1,7 @@
 import React from "react";
 import "../css/AppStyle.css";
 import PropTypes from "prop-types";
-import {SUCCESS_MSG, FAILED_MSG} from "../store/contants"
+import {SUCCESS_MSG, FAILED_MSG} from "../store/constants"
 
 class Result extends React.Component {
   static propTypes = {
@@ -10,7 +10,7 @@ class Result extends React.Component {
 
   ontryAgainClick = () => {
     this.props.history.push({
-      pathname: "/",
+      pathname: "/"
     });
   };
 

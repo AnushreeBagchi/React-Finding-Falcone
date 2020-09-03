@@ -27,7 +27,16 @@ class App extends React.Component {
     this.props.getInitialDestinations();
   }
 
-  
+  componentDidUpdate() {
+    if (this.props.state.error.error) {
+      this.props.history.push({
+        pathname: "/error/",
+        state: {
+          response: this.props.state
+        },
+      });
+    }
+  }
 
   onReset = () => {
     this.props.getInitialDestinations();
@@ -35,13 +44,18 @@ class App extends React.Component {
 
   findFalcone = async () => {
     await this.props.getToken();
-    let requestBody = {
-      token: this.props.state.findFalcone.token.token,
-      planet_names: getSelectedPlanets(this.props.state),
-      vehicle_names: getSelectedVehicles(this.props.state),
-    };
-    await this.props.findFalcone(requestBody);
-    this.goToResult();
+    if (this.props.state.findFalcone.token){
+      let requestBody = {
+        token: this.props.state.findFalcone.token.token,
+        planet_names: getSelectedPlanets(this.props.state),
+        vehicle_names: getSelectedVehicles(this.props.state),
+      };
+      await this.props.findFalcone(requestBody);
+    }    
+    
+    if (!this.props.state.error.error) {
+      this.goToResult();
+    }
   };
 
   goToResult = () => {
@@ -80,6 +94,7 @@ class App extends React.Component {
         <button className="searchButton" onClick={this.findFalcone}>
           Find Falcone!
         </button>
+        
       </div>
     );
   }

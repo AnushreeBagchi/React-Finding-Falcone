@@ -1,14 +1,14 @@
 import axios from "axios";
-import * as url from "../contants";
-import {
-  findFalconeAction,
-  findFalconeActionFailed,
-  fetchTokenAction,
-  fetchTokenActionFailed,
-} from "./actions";
+import * as url from "../constants";
+import { findFalconeAction, fetchTokenAction } from "./actions";
 
 //actions
-import { NUMBER_OF_DESTINATIONS } from "../contants";
+import {
+  NUMBER_OF_DESTINATIONS,
+  FIND_FALCONE_FAILED_MSG,
+  NOT_SELECTED_MSG,
+  FETCH_TOKEN_FAILED_MSG,
+} from "../constants";
 
 export const findFalcone = (requestPayload) => async (dispatch) => {
   if (
@@ -18,8 +18,10 @@ export const findFalcone = (requestPayload) => async (dispatch) => {
     requestPayload.vehicle_names.length !== NUMBER_OF_DESTINATIONS
   ) {
     dispatch({
-      type: findFalconeActionFailed.type
-    })
+      type: "onError",
+      error: NOT_SELECTED_MSG,
+    });
+    return;
   }
 
   return dispatch({
@@ -29,7 +31,7 @@ export const findFalcone = (requestPayload) => async (dispatch) => {
       method: "post",
       data: requestPayload,
       onSuccess: findFalconeAction.type,
-      onError: findFalconeActionFailed.type,
+      onError: FIND_FALCONE_FAILED_MSG,
     },
   });
 };
@@ -42,5 +44,10 @@ export const getToken = () => async (dispatch) => {
     .then((response) => {
       dispatch(fetchTokenAction(response.data));
     })
-    .catch((error) => dispatch(fetchTokenActionFailed(error)));
+    .catch((error) => {
+      dispatch({
+        type: "onError",
+        error: FETCH_TOKEN_FAILED_MSG,
+      });
+    });
 };

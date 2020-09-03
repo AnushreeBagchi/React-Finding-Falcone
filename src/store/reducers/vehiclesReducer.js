@@ -1,5 +1,5 @@
 import { createReducer} from "@reduxjs/toolkit";
-import {fetchVehiclesAction, fetchVehiclesActionFailed} from "../actions/actions";
+import {fetchVehiclesAction} from "../actions/actions";
 
 const reducer = createReducer([], {
     [fetchVehiclesAction.type]: (vehicles, action) => {
@@ -7,9 +7,6 @@ const reducer = createReducer([], {
       action.payload.forEach(veh => {
         vehicles.push(veh)
       });
-    },
-    [fetchVehiclesActionFailed.type]: (vehicles, action) => {
-      console.log("fetchVehiclesActionFailed");
     }
   });
 

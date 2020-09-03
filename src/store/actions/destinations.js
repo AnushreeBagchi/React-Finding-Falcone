@@ -1,5 +1,5 @@
 import {getInitialDestinationsAction, addDestinationAction, vehicleSelectedAction} from "./actions";
-import {NUMBER_OF_DESTINATIONS} from "../contants";
+import {NUMBER_OF_DESTINATIONS} from "../constants";
 
 //actions
 export const getInitialDestinations = () => (dispatch) => {

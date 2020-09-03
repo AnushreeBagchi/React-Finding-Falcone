@@ -1,5 +1,5 @@
 import axios  from 'axios';
-import { baseURL } from '../contants';
+import { baseURL } from '../constants';
 
 const api =  ({dispatch}) => next => async action => {
     if (action.type !== "apiCallBegan") return next(action);
@@ -15,7 +15,7 @@ const api =  ({dispatch}) => next => async action => {
         });
         dispatch({type: onSuccess, payload: response.data});
     } catch (error) {
-        dispatch({type: onError, payload: error});
+        dispatch({type: "onError", error: `${error.message} (${onError})`});
     }
 
 }

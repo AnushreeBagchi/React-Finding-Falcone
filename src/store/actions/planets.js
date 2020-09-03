@@ -1,5 +1,6 @@
-import * as url from "../contants";
-import {fetchPlanetsAction, fetchPlanetsActionFailed} from "./actions";
+import {FETCH_PLANETS_FAILED_MSG, PLANET_API} from "../constants";
+
+import {fetchPlanetsAction} from "./actions";
 // import {planetsReducer} from "../reducers/planetsReducer"
 
 //actions
@@ -8,9 +9,9 @@ export const fetchPlanets = () => async (dispatch) => {
     dispatch({
       type: "apiCallBegan",
       payload: {
-        url : url.PLANET_API,
+        url : PLANET_API,
         onSuccess: fetchPlanetsAction.type,
-        onError: fetchPlanetsActionFailed.type
+        onError: FETCH_PLANETS_FAILED_MSG
       }
     })
 };

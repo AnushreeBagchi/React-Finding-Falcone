@@ -1,5 +1,5 @@
 import { createReducer} from "@reduxjs/toolkit";
-import {fetchPlanetsAction, fetchPlanetsActionFailed} from "../actions/actions";
+import {fetchPlanetsAction} from "../actions/actions";
 
 const reducer = createReducer([], {
     [fetchPlanetsAction.type] : (planets, action) => {
@@ -7,9 +7,6 @@ const reducer = createReducer([], {
         action.payload.forEach(planet => {
             planets.push(planet);
         });
-    },
-    [fetchPlanetsActionFailed.type] : (planets, action) => {
-        console.log("fetchPlanetsActionFailed");
     }
     });
 
