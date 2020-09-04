@@ -6,7 +6,7 @@ import {fetchPlanetsAction} from "./actions";
 //actions
 
 export const fetchPlanets = () => async (dispatch) => {
-    dispatch({
+    return dispatch({
       type: "apiCallBegan",
       payload: {
         url : PLANET_API,

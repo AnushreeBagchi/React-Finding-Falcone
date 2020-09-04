@@ -1,6 +1,6 @@
 export const PLANET_API = "/planets";
 export const VEHICLE_API = "/vehicles";
-export const AUTH_TOKEN_URL = "https://findfalcone.herokuapp.com/tokens";
+export const AUTH_TOKEN_URL = "https://findfalcone.herokuapp.com/token";
 export const FIND_FALCONE_API = "https://findfalcone.herokuapp.com/find";
 export const baseURL = "https://findfalcone.herokuapp.com/";
 

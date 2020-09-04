@@ -4,7 +4,7 @@ import {fetchVehiclesAction} from "./actions";
 //actioncreators
 
 export const fetchVehicles = () => async (dispatch) => {
-    dispatch({
+    return dispatch({
       type: "apiCallBegan",
       payload: {
         url : VEHICLE_API,
