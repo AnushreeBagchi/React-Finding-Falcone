@@ -6,10 +6,10 @@ import { connect } from "react-redux";
 import { addDestination } from "../store/actions/destinations";
 import { SELECT_DEST_MSG } from "../store/constants";
 
-import InputLabel from '@material-ui/core/InputLabel';
-import FormControl from '@material-ui/core/FormControl';
-import NativeSelect from '@material-ui/core/NativeSelect';
-import RadioGroup from '@material-ui/core/RadioGroup';
+import InputLabel from "@material-ui/core/InputLabel";
+import FormControl from "@material-ui/core/FormControl";
+import NativeSelect from "@material-ui/core/NativeSelect";
+import RadioGroup from "@material-ui/core/RadioGroup";
 
 class Destinations extends React.Component {
   static propTypes = {
@@ -31,6 +31,12 @@ class Destinations extends React.Component {
     return currentDest.selectedPlanet ? true : false;
   };
 
+  getClassName = () => {
+    let destinations = this.props.state.destinations;
+    let currentDest = destinations[this.props.index];
+    return currentDest.selectedVehicle ? "selected" : "unselected";
+  };
+
   render() {
     let planets = this.props.planets;
     let optionItems = planets.map((planet) => (
@@ -42,25 +48,19 @@ class Destinations extends React.Component {
 
     return (
       <div className="destination">
-
-        <FormControl  className="destinationSelect">
-          <InputLabel className="destinationLabel" htmlFor="outlined-age-native-simple">{SELECT_DEST_MSG}</InputLabel>
-          <NativeSelect
-            value={selectedValue}
-            onChange={this.onDestinationChange}
-            label="Destination"
-          >
-              <option value={selectedValue}>{selectedValue}</option>
-              {optionItems}
+        <FormControl className="destinationSelect">
+          <InputLabel className={this.getClassName()} htmlFor="outlined-age-native-simple">
+            {SELECT_DEST_MSG}
+          </InputLabel>
+          <NativeSelect value={selectedValue} onChange={this.onDestinationChange} label="Destination">
+            <option value={selectedValue}>{selectedValue}</option>
+            {optionItems}
           </NativeSelect>
         </FormControl>
 
         {this.showVehicle() && (
           <RadioGroup name={this.props.index}>
-          <Vehicle
-            vehicles={this.props.vehicles}
-            destinationGroup={this.props.index}
-          ></Vehicle>
+            <Vehicle vehicles={this.props.vehicles} destinationGroup={this.props.index} ></Vehicle>
           </RadioGroup>
         )}
       </div>

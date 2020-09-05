@@ -2,51 +2,28 @@
   text-align: center;
 }
 
-.destinationList {
-  display: flex;
-  justify-content: center;
-  margin: 0 auto;
-}
-
-.button {
-  margin: 20px !important;
-  min-width: 126px;
-}
-.resetButton {
-  width: 126px;
-}
-
 .destination {
-    padding: 5%;
-    padding-top: 20px;
-    padding-bottom: 20px;
-    margin: 20px;
-    min-width: 5%;
-    
+  padding: 5%;
+  padding-top: 20px;
+  padding-bottom: 20px;
+  margin: 20px;
+  min-width: 5%;
 }
 
-.destinationLabel {
+.unselected {
+  position: relative !important;
+  color: red !important;
+}
+
+.selected {
   position: relative !important;
 }
 
 .vehicleList {
-    padding-top: 20px;
-}
-
-button {
-  padding: 5px;
-  margin: 15px;
-}
-
-.vehicleList {
+  padding-top: 20px;
   text-align: left;
 }
 
-.resultDiv {
-  text-align: center;
-  padding-top: 10%;
-  
-}
 .error {
   text-align: center;
   margin-top: 10%;
@@ -62,6 +39,5 @@ button {
 }
 
 .paper {
-  margin-right : 15px ;
+  margin-right: 15px;
 }
-

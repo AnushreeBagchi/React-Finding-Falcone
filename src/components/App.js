@@ -13,17 +13,21 @@ import {
   getAvailableVehicles,
   getSelectedVehicles,
 } from "../store/actions/vehicles";
-import { getInitialDestinations, getTimeTaken } from "../store/actions/destinations";
+import {
+  getInitialDestinations,
+  getTimeTaken,
+} from "../store/actions/destinations";
 import { findFalcone, getToken } from "../store/actions/findFalcone";
-import Button from '@material-ui/core/Button';
+import { NUMBER_OF_DESTINATIONS } from "../store/constants";
+import Button from "@material-ui/core/Button";
 import Paper from "@material-ui/core/Paper";
 import Grid from "@material-ui/core/Grid";
-import Hidden from "@material-ui/core/Hidden";
 import Container from "@material-ui/core/Container";
-import Card from '@material-ui/core/Card';
-import CardActions from '@material-ui/core/CardActions';
-import CardContent from '@material-ui/core/CardContent';
-import Typography from '@material-ui/core/Typography';
+import Card from "@material-ui/core/Card";
+import CardActions from "@material-ui/core/CardActions";
+import CardContent from "@material-ui/core/CardContent";
+import Typography from "@material-ui/core/Typography";
+
 class App extends React.Component {
   static propTypes = {
     history: PropTypes.object,
@@ -40,7 +44,7 @@ class App extends React.Component {
       this.props.history.push({
         pathname: "/error/",
         state: {
-          response: this.props.state
+          response: this.props.state,
         },
       });
     }
@@ -50,18 +54,22 @@ class App extends React.Component {
     this.props.getInitialDestinations();
   };
 
+  isAllSelected = () => {
+    let planet_names = getSelectedPlanets(this.props.state);
+    let vehicle_names = getSelectedVehicles(this.props.state);
+    return planet_names.length === NUMBER_OF_DESTINATIONS &&
+      vehicle_names.length === NUMBER_OF_DESTINATIONS 
+  };
+
   findFalcone = async () => {
     await this.props.getToken();
-    if (this.props.state.findFalcone.token){
+    if (this.props.state.findFalcone.token) {
       let requestBody = {
         token: this.props.state.findFalcone.token.token,
         planet_names: getSelectedPlanets(this.props.state),
         vehicle_names: getSelectedVehicles(this.props.state),
       };
       await this.props.findFalcone(requestBody);
-    }    
-    
-    if (!this.props.state.error.error) {
       this.goToResult();
     }
   };
@@ -79,49 +87,55 @@ class App extends React.Component {
   render() {
     return (
       <Container>
-      <div className="app">
-        
-        <h1 className="header">Finding Falcone!</h1>
-        {this.props.state.planets.length > 0 &&
-        this.props.state.vehicles.length > 0 ? (
-             <Grid container spacing={3}>
-                {Object.keys(this.props.state.destinations).map((dest) => (
-                  <Grid key={dest} item xs = {12} md={6} lg={3}>
-                    <Paper className = "paper">
-                        <Destinations
-                          
-                          index={dest}
-                          planets={getAvailablePlanets(this.props.state)}
-                          vehicles={getAvailableVehicles(this.props.state)}
-                        ></Destinations>
+        <div className="app">
+          <h1 className="header">Finding Falcone!</h1>
+          {this.props.state.planets.length > 0 &&
+          this.props.state.vehicles.length > 0 ? (
+            <Grid container spacing={3}>
+              {Object.keys(this.props.state.destinations).map((dest) => (
+                <Grid key={dest} item xs={12} md={6} lg={3}>
+                  <Paper className="paper">
+                    <Destinations
+                      index={dest}
+                      planets={getAvailablePlanets(this.props.state)}
+                      vehicles={getAvailableVehicles(this.props.state)}
+                    ></Destinations>
                   </Paper>
-                  </Grid>
-                ))}
-              </Grid>
-        ) : (
-          <p></p>
-        )}
-        <Grid container spacing={3} justify="center"
-  alignItems="center">
-          <Grid item xs ={12} sm={6} md = {4} lg = {3}>
-            <Card variant="outlined">
+                </Grid>
+              ))}
+            </Grid>
+          ) : (
+            <p></p>
+          )}
+          <Grid container spacing={3} justify="center" alignItems="center">
+            <Grid item xs={12} sm={6} md={4} lg={3}>
+              <Card variant="outlined">
                 <CardContent>
-                <Typography color="textSecondary" gutterBottom>
-                Time Taken
-                </Typography>
-                <Typography variant="h5" component="h2">
+                  <Typography color="textSecondary" gutterBottom>
+                    Time Taken
+                  </Typography>
+                  <Typography variant="h5" component="h2">
                     {getTimeTaken(this.props.state)}
-                </Typography>
+                  </Typography>
                 </CardContent>
                 <CardActions>
-                  <Button variant="outlined"  size="medium" color="primary" onClick={this.findFalcone}>Find Falcone</Button>
-                  <Button size="medium" onClick={this.onReset} >Reset</Button>
+                  <Button
+                    disabled ={!this.isAllSelected()}
+                    variant="outlined"
+                    size="medium"
+                    color="primary"
+                    onClick={this.findFalcone}
+                  >
+                    Find Falcone
+                  </Button>
+                  <Button size="medium" onClick={this.onReset}>
+                    Reset
+                  </Button>
                 </CardActions>
-            </Card>
+              </Card>
+            </Grid>
           </Grid>
-        </Grid>     
-        
-      </div>
+        </div>
       </Container>
     );
   }
