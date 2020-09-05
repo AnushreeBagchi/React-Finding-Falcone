@@ -27,6 +27,7 @@ import Card from "@material-ui/core/Card";
 import CardActions from "@material-ui/core/CardActions";
 import CardContent from "@material-ui/core/CardContent";
 import Typography from "@material-ui/core/Typography";
+import CircularProgress from "@material-ui/core/CircularProgress";
 
 class App extends React.Component {
   static propTypes = {
@@ -104,9 +105,8 @@ class App extends React.Component {
                 </Grid>
               ))}
             </Grid>
-          ) : (
-            <p></p>
-          )}
+          ) : <CircularProgress />
+          }
           <Grid container spacing={3} justify="center" alignItems="center">
             <Grid item xs={12} sm={6} md={4} lg={3}>
               <Card variant="outlined">
