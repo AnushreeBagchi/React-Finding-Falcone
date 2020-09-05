@@ -11,7 +11,7 @@ import FormControl from "@material-ui/core/FormControl";
 import NativeSelect from "@material-ui/core/NativeSelect";
 import RadioGroup from "@material-ui/core/RadioGroup";
 
-class Destinations extends React.Component {
+export class Destinations extends React.Component {
   static propTypes = {
     planets: PropTypes.array,
     vehicles: PropTypes.array,
