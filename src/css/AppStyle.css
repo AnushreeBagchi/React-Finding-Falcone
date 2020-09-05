@@ -8,22 +8,34 @@
   margin: 0 auto;
 }
 
+.button {
+  margin: 20px !important;
+  min-width: 126px;
+}
+.resetButton {
+  width: 126px;
+}
+
 .destination {
     padding: 5%;
     padding-top: 20px;
     padding-bottom: 20px;
     margin: 20px;
+    min-width: 5%;
+    
+}
+
+.destinationLabel {
+  position: relative !important;
 }
 
 .vehicleList {
     padding-top: 20px;
-    /* visibility: hidden; */
 }
 
 button {
   padding: 5px;
   margin: 15px;
-  width: 10%;
 }
 
 .vehicleList {
@@ -35,3 +47,21 @@ button {
   padding-top: 10%;
   
 }
+.error {
+  text-align: center;
+  margin-top: 10%;
+  padding: 10px;
+  position: absolute;
+  left: 30%;
+  right: 30%;
+  top: 10%;
+}
+
+.time {
+  color: #3f51b5;
+}
+
+.paper {
+  margin-right : 15px ;
+}
+

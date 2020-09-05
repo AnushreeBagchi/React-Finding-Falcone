@@ -6,6 +6,11 @@ import { connect } from "react-redux";
 import { addDestination } from "../store/actions/destinations";
 import { SELECT_DEST_MSG } from "../store/constants";
 
+import InputLabel from '@material-ui/core/InputLabel';
+import FormControl from '@material-ui/core/FormControl';
+import NativeSelect from '@material-ui/core/NativeSelect';
+import RadioGroup from '@material-ui/core/RadioGroup';
+
 class Destinations extends React.Component {
   static propTypes = {
     planets: PropTypes.array,
@@ -37,16 +42,26 @@ class Destinations extends React.Component {
 
     return (
       <div className="destination">
-        <h6> {this.props.index.toUpperCase()} </h6>
-        <select onChange={this.onDestinationChange}>
-          <option value={selectedValue}>{selectedValue}</option>
-          {optionItems}
-        </select>
+
+        <FormControl  className="destinationSelect">
+          <InputLabel className="destinationLabel" htmlFor="outlined-age-native-simple">{SELECT_DEST_MSG}</InputLabel>
+          <NativeSelect
+            value={selectedValue}
+            onChange={this.onDestinationChange}
+            label="Destination"
+          >
+              <option value={selectedValue}>{selectedValue}</option>
+              {optionItems}
+          </NativeSelect>
+        </FormControl>
+
         {this.showVehicle() && (
+          <RadioGroup name={this.props.index}>
           <Vehicle
             vehicles={this.props.vehicles}
             destinationGroup={this.props.index}
           ></Vehicle>
+          </RadioGroup>
         )}
       </div>
     );

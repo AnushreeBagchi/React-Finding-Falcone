@@ -15,6 +15,11 @@ import {
 } from "../store/actions/vehicles";
 import { getInitialDestinations, getTimeTaken } from "../store/actions/destinations";
 import { findFalcone, getToken } from "../store/actions/findFalcone";
+import Button from '@material-ui/core/Button';
+import Paper from "@material-ui/core/Paper";
+import Grid from "@material-ui/core/Grid";
+import Hidden from "@material-ui/core/Hidden";
+import Container from "@material-ui/core/Container";
 
 class App extends React.Component {
   static propTypes = {
@@ -70,32 +75,66 @@ class App extends React.Component {
 
   render() {
     return (
+      <Container>
       <div className="app">
+        
         <h1 className="header">Finding Falcone!</h1>
         {this.props.state.planets.length > 0 &&
         this.props.state.vehicles.length > 0 ? (
-          <ul className="destinationList">
-            {Object.keys(this.props.state.destinations).map((dest) => (
-              <Destinations
-                key={dest}
-                index={dest}
-                planets={getAvailablePlanets(this.props.state)}
-                vehicles={getAvailableVehicles(this.props.state)}
-              ></Destinations>
-            ))}
-          </ul>
+             <Grid container spacing={3}>
+                {Object.keys(this.props.state.destinations).map((dest) => (
+                  <Grid key={dest} item xs = {12} md={6} lg={3}>
+                    <Paper className = "paper">
+                        <Destinations
+                          
+                          index={dest}
+                          planets={getAvailablePlanets(this.props.state)}
+                          vehicles={getAvailableVehicles(this.props.state)}
+                        ></Destinations>
+                  </Paper>
+                  </Grid>
+                ))}
+              </Grid>
         ) : (
           <p></p>
         )}
-        <div>Time Taken : {getTimeTaken(this.props.state)}</div>
-        <button className="resetButton" onClick={this.onReset}>
-          Reset
-        </button>
-        <button className="searchButton" onClick={this.findFalcone}>
-          Find Falcone!
-        </button>
+        <Grid container spacing={3}>
+          <Grid item xs>
+            <div>Time Taken : 
+              <span className="time"> {getTimeTaken(this.props.state)} </span>
+            </div>
+          </Grid>
+        </Grid>
+        <Grid container spacing={1} justify="center"
+  alignItems="center">
+          <Hidden only={['sm','md','lg','xl']}>
+            <Grid item xs = {12}>
+              <Button variant="contained" color="primary"  className="button searchButton" onClick={this.findFalcone}>
+              Find Falcone!
+              </Button>
+              
+            </Grid>
+            <Grid item xs = {12}>
+              <Button variant="contained" className="button resetButton" onClick={this.onReset}>
+              Reset
+              </Button>
+            </Grid>
+          </Hidden>
+          <Hidden only={['xs']}>
+            <Grid item xs = {12}>
+              <Button variant="contained" className="button resetButton" onClick={this.onReset}>
+                Reset
+              </Button>
+              <Button variant="contained" color="primary"  className="button searchButton" onClick={this.findFalcone}>
+                Find Falcone!
+              </Button>
+            </Grid>
+          </Hidden>
+        </Grid>
+        
         
       </div>
+      </Container>
     );
   }
 }

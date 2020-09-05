@@ -1,7 +1,10 @@
 import React from "react";
 import "../css/AppStyle.css";
 import PropTypes from "prop-types";
-import {SUCCESS_MSG, FAILED_MSG} from "../store/constants"
+import {SUCCESS_MSG, FAILED_MSG} from "../store/constants";
+import Button from '@material-ui/core/Button';
+import "../css/AppStyle.css";
+
 
 class Result extends React.Component {
   static propTypes = {
@@ -35,7 +38,7 @@ class Result extends React.Component {
             <h3>Planet found: {planet}</h3>
           </>
         )}
-        <button onClick={this.ontryAgainClick}>Start Again</button>
+        <Button variant="contained" color="primary" className="button" onClick={this.ontryAgainClick}>Start Again</Button>
       </div>
 
     );
