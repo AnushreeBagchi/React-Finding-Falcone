@@ -20,7 +20,10 @@ import Paper from "@material-ui/core/Paper";
 import Grid from "@material-ui/core/Grid";
 import Hidden from "@material-ui/core/Hidden";
 import Container from "@material-ui/core/Container";
-
+import Card from '@material-ui/core/Card';
+import CardActions from '@material-ui/core/CardActions';
+import CardContent from '@material-ui/core/CardContent';
+import Typography from '@material-ui/core/Typography';
 class App extends React.Component {
   static propTypes = {
     history: PropTypes.object,
@@ -98,40 +101,25 @@ class App extends React.Component {
         ) : (
           <p></p>
         )}
-        <Grid container spacing={3}>
-          <Grid item xs>
-            <div>Time Taken : 
-              <span className="time"> {getTimeTaken(this.props.state)} </span>
-            </div>
-          </Grid>
-        </Grid>
-        <Grid container spacing={1} justify="center"
+        <Grid container spacing={3} justify="center"
   alignItems="center">
-          <Hidden only={['sm','md','lg','xl']}>
-            <Grid item xs = {12}>
-              <Button variant="contained" color="primary"  className="button searchButton" onClick={this.findFalcone}>
-              Find Falcone!
-              </Button>
-              
-            </Grid>
-            <Grid item xs = {12}>
-              <Button variant="contained" className="button resetButton" onClick={this.onReset}>
-              Reset
-              </Button>
-            </Grid>
-          </Hidden>
-          <Hidden only={['xs']}>
-            <Grid item xs = {12}>
-              <Button variant="contained" className="button resetButton" onClick={this.onReset}>
-                Reset
-              </Button>
-              <Button variant="contained" color="primary"  className="button searchButton" onClick={this.findFalcone}>
-                Find Falcone!
-              </Button>
-            </Grid>
-          </Hidden>
-        </Grid>
-        
+          <Grid item xs ={12} sm={6} md = {4} lg = {3}>
+            <Card variant="outlined">
+                <CardContent>
+                <Typography color="textSecondary" gutterBottom>
+                Time Taken
+                </Typography>
+                <Typography variant="h5" component="h2">
+                    {getTimeTaken(this.props.state)}
+                </Typography>
+                </CardContent>
+                <CardActions>
+                  <Button variant="outlined"  size="medium" color="primary" onClick={this.findFalcone}>Find Falcone</Button>
+                  <Button size="medium" onClick={this.onReset} >Reset</Button>
+                </CardActions>
+            </Card>
+          </Grid>
+        </Grid>     
         
       </div>
       </Container>
