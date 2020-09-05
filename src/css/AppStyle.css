@@ -2,6 +2,13 @@
   text-align: center;
 }
 
+.header {
+  color: #162054;
+  font-size: 30px;
+  padding: 10px;
+  margin: 15px;
+}
+
 .destination {
   padding: 5%;
   padding-top: 20px;

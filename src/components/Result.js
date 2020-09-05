@@ -36,9 +36,13 @@ class Result extends React.Component {
       <Grid container spacing={3} justify="center" alignItems="center">
           <Grid item xs={12} sm={6} md={4} lg={3}>
       <Card variant="outlined" className="resultDiv">
-        {!isSuccess ? (
-          <h2>{failureMsg}</h2>
-        ) : (
+        {!isSuccess ? 
+        (
+          <CardContent>
+          <Typography color="textSecondary">{failureMsg}</Typography>
+          </CardContent>
+        ) : 
+        (
           <CardContent>
             <Typography color="textSecondary">{successMsg}</Typography>
             <br/>

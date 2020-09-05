@@ -89,7 +89,7 @@ class App extends React.Component {
     return (
       <Container>
         <div className="app">
-          <h1 className="header">Finding Falcone!</h1>
+          <header className="header">Finding Falcone!</header>
           {this.props.state.planets.length > 0 &&
           this.props.state.vehicles.length > 0 ? (
             <Grid container spacing={3}>
