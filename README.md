@@ -53,3 +53,5 @@ This UI will enable King Shan to -
 
 Check this out @ https://finding-falcone-anushree.netlify.app/
 
+![alt text](https://media.giphy.com/media/WoF5Y6OzurdHLSrPcS/giphy.gif "Image of the project")
+
